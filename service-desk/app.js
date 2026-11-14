@@ -42,6 +42,9 @@ let selectedTicketId = tickets[0]?.id ?? null;
 const views = document.querySelectorAll(".view");
 const tabs = document.querySelectorAll(".tab");
 const ticketForm = document.querySelector("#ticketForm");
+const textFields = ["#requester", "#title", "#description"].map((selector) =>
+  document.querySelector(selector)
+);
 const ticketList = document.querySelector("#ticketList");
 const ticketDetails = document.querySelector("#ticketDetails");
 const ticketCounter = document.querySelector("#ticketCounter");
@@ -60,8 +63,23 @@ tabs.forEach((tab) => {
   });
 });
 
+textFields.forEach((field) => {
+  field.addEventListener("input", () => field.setCustomValidity(""));
+});
+
+ticketForm.addEventListener("reset", () => {
+  textFields.forEach((field) => field.setCustomValidity(""));
+});
+
 ticketForm.addEventListener("submit", (event) => {
   event.preventDefault();
+
+  const blankField = textFields.find((field) => !field.value.trim());
+  if (blankField) {
+    blankField.setCustomValidity("Este campo não pode conter apenas espaços.");
+    blankField.reportValidity();
+    return;
+  }
 
   const formTicket = {
     id: nextId(),
