@@ -131,9 +131,12 @@ function renderTicketList() {
   const term = searchInput.value.trim().toLowerCase();
   const filteredTickets = tickets.filter((ticket) => {
     return (
-      String(ticket.id).includes(term) ||
-      ticket.title.toLowerCase().includes(term) ||
-      ticket.requester.toLowerCase().includes(term)
+      ticket.status !== "Resolvido" &&
+      (
+        String(ticket.id).includes(term) ||
+        ticket.title.toLowerCase().includes(term) ||
+        ticket.requester.toLowerCase().includes(term)
+      )
     );
   });
 
